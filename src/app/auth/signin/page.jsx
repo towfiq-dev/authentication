@@ -14,7 +14,7 @@ const SignInPage = () => {
     const email = e.target.email.value
     const password = e.target.password.value
     
-    const {data, error} = await authClient.email.signIn({
+    const {data, error} = await authClient.signIn.email({
       email, password,
       //rememberMe: true,
       callbackURL: '/navLink/dashboard'

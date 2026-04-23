@@ -2,10 +2,29 @@
 import React, { useState } from 'react';
 import {Check, Envelope, Eye, EyeSlash} from "@gravity-ui/icons";
 import {Button, Description, FieldError, Form, InputGroup, Label, TextField} from "@heroui/react";
+//import { useRouter } from 'next/navigation';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'react-toastify';
 
 const SignInPage = () => {
   const [isVisible, setIsVisible] = useState(false);
-  
+  //const router = useRouter() 
+  const onSubmit = async(e)=>{
+    e.preventDefault()
+    const email = e.target.email.value
+    const password = e.target.password.value
+    
+    const {data, error} = await authClient.email.signIn({
+      email, password,
+      //rememberMe: true,
+      callbackURL: '/navLink/dashboard'
+    })
+    if (data) {
+      toast.success('successfully Sign In')
+    }if (error) {
+      toast.error('SignIn failed')
+    }
+  }
   // const onSubmit = async(e) => {
   //   e.preventDefault()
   //   const formData = new FormData(e.currentTarget)
@@ -14,11 +33,12 @@ const SignInPage = () => {
   //   const {data, error} = await authClient.signIn.email({
   //   email: userData.email,
   //   password: userData.password,
-  //   rememberMe: true,
-  //   callbackURL: '/'
+  //   //rememberMe: true,
+  //   //callbackURL: '/'
   // })
   // if (data) {
   //     toast.success('Congratulation. You are successfully SignIp.')
+  //     router.push('/navLink/contact')
   //   }if (error) {
   //     toast.error('Something went wrong. Please try again later.')
   //   }
@@ -27,7 +47,7 @@ const SignInPage = () => {
   return (
       <div className='grid justify-center mt-10'>
         <h1 className='text-center text-2xl font-semi-bold'>Sign In your Account</h1>
-        <Form className="flex w-96 flex-col gap-4 mt-5">
+        <Form className="flex w-96 flex-col gap-4 mt-5"onSubmit={onSubmit}>
       {/* email */}
         <TextField
           isRequired

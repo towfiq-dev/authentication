@@ -4,10 +4,11 @@ import {Check, Envelope, Eye, EyeSlash} from "@gravity-ui/icons";
 import {Button, Description, FieldError, Form, Input, InputGroup, Label, TextField} from "@heroui/react";
 import { authClient } from '@/lib/auth-client';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const SignUpPage = () => {
   const [isVisible, setIsVisible] = useState(false);
-
+  const router = useRouter()
   const onSubmit = async(e)=>{
     e.preventDefault()
     const name = e.target.name.value
@@ -16,12 +17,11 @@ const SignUpPage = () => {
     
     const {data, error} = await authClient.signUp.email({
       name, email, password,
-      //rememberMe: true,
-      //callbackURL: '/'
       
     })
     if (data) {
       toast.success('Successfully SignUp')
+      router.push('/navLink/contact')
     }if (error) {
       toast.error('Something went wrong.')
     }

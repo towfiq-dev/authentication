@@ -3,7 +3,8 @@ import React from 'react';
 import { Button, Link } from "@heroui/react";
 import ThemeSwitch from '../toggleTheme/ThemeSwitch';
 import Structure from './Structure';
-import { signOut, useSession } from '@/lib/auth-client';
+import { authClient, signOut, useSession } from '@/lib/auth-client';
+import { toast } from 'react-toastify';
 const Navbar = () => {
   const {data, isPending} = useSession()
   if (isPending) {
@@ -16,6 +17,10 @@ const Navbar = () => {
     )
   }
   const user = data?.user
+  const logOut=()=>{
+    authClient.signOut()
+    toast('Sign Out successfully')
+  }
   return (
     <div>
       <nav className="sticky top-0 z-40 w-full border-b border-separator bg-background/70 backdrop-blur-lg">
@@ -30,12 +35,14 @@ const Navbar = () => {
     </ul>
     <div className='flex items-center gap-3'>
     <ThemeSwitch></ThemeSwitch>
-    {
+    <div>
+      {
       user? 
       <>
       
       <Link href='/'>
-      <Button onClick={()=>signOut()}>Sign Out</Button>
+      <p>{user?.name}</p>
+      <Button onClick={()=>logOut()}>Log Out</Button>
       </Link>
       </>
       :
@@ -43,6 +50,7 @@ const Navbar = () => {
       <Link href='/auth/signin'>Sign In</Link>
       </>
     }
+    </div>
   </div>
   </header>
 </nav>
